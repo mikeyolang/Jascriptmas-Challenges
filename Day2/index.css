@@ -1,65 +1,97 @@
-/* General body styling */
+/* Reset some default browser styles */
+body, h1, input, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
 body {
-  font-family: 'Times New Roman', Times, serif;
-  background-color: #8B0000; /* Deep red for festive feel */
-  margin: 0;
-  padding: 0;
-  color: white;
-  text-align: center;
+    background-color: #f7f8fc;
+    color: #333;
+    line-height: 1.6;
+    text-align: center;
+    padding: 20px;
+    background-image: url('xmasMovieBg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    font-family: 'Poppins';
 }
 
-/* Header styling */
-h2 {
-  margin-top: 20px;
-  color: #FFD700; /* Gold for a festive accent */
-  font-size: 2rem;
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-  text-shadow: 2px 2px 4px black;
+/* Heading */
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    color: darkolivegreen;
+    margin-bottom: 20px;
+    font-family: 'Bungee Shade', serif;
 }
 
-h4 {
-  font-family: 'Comic Sans MS', 'Comic Sans', cursive;
-  color: white;
-  margin-bottom: 20px;
+/* Main Container */
+main {
+    background-color: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 600px;
+    margin: 1em auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Calendar container styling */
-.calendar-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  padding: 20px;
-  max-width: 800px;
-  margin: 0 auto;
-  background-color: #FF6347; /* Tomato red */
-  border-radius: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+/* Emoji Clues */
+.emoji-clues-container{
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
-/* Individual calendar boxes */
-.calendar-box {
-  background-color: #FFF5EE; /* Off-white to contrast with red */
-  color: #8B0000; /* Deep red for text */
-  font-size: 1.2rem;
-  text-align: center;
-  padding: 10px;
-  border: 2px solid #FFD700; /* Gold borders */
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.3s, box-shadow 0.3s;
-  cursor: pointer;
+/* Form Styling */
+form {
+    margin-bottom: 20px;
 }
 
-.calendar-box:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 10px rgba(255, 215, 0, 0.8);
+label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    display: block;
 }
 
-.calendar-box p {
-  margin: 5px 0 0 0;
-  font-size: 1rem;
-  font-weight: bold;
+input[type="text"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+input[type="text"]:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+/* Button Styling */
+button {
+    background-color: #3498db;
+    color: #ffffff;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+/* Answer Box */
+.answer {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #27ae60;
+    min-height: 40px; /* Ensures space is allocated even if empty */
 }

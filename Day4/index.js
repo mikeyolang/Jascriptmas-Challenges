@@ -1,33 +1,61 @@
-let anagrams = [
-  ["Can Assault", "Santa Claus"],
-  ["Refreshed Erudite Londoner", "Rudolf the Red Nose Reindeer"],
-  ["Frosty The Snowman", "Honesty Warms Front"],
-  ["Drastic Charms", "Christmas Cards"],
-  ["Congress Liar", "Carol Singers"],
-  ["The Tin Glints", "Silent Night"],
-  ["Be The Helm", "Betlehem"],
-  ["Is Car Thieves", "Christmas Eve"],
+const calendarContainer = document.getElementById("calendar");
+
+// Sample gifts for each day
+const gifts = [
+  "Chocolate Bar 🎁",
+  "Holiday Mug ☕",
+  "Warm Socks 🧦",
+  "Candy Cane 🍭",
+  "Christmas Card 📜",
+  "Snow Globe ❄️",
+  "Ornament 🎄",
+  "Gift Card 💳",
+  "Hot Cocoa 🍫",
+  "Scarf 🧣",
+  "Mitten 🧤",
+  "Mini Wreath 🌿",
+  "Christmas Candle 🕯️",
+  "Holiday Cookie 🍪",
+  "Toy Train 🚂",
+  "Santa Hat 🎅",
+  "Reindeer Plush 🦌",
+  "Stocking 🎀",
+  "Holiday Book 📚",
+  "Festive Pen ✍️",
+  "Pine Scent Spray 🌲",
+  "Photo Frame 🖼️",
+  "Holiday Lights 💡",
+  "Star Decor ⭐",
 ];
 
-function findAnagrams(array) {
-  const results = [];
-  for (const [phase1, phase2] of array) {
-    // normalize and sort characters of both phrases
-    const normalize = (str) =>
-      str
-        .toLowerCase()
-        .replace(/[^a-z]/g, "")
-        .split("")
-        .sort()
-        .join("");
-    const normalize1 = normalize(phase1);
-    const normalize2 = normalize(phase2);
+const openedDays = JSON.parse(localStorage.getItem("openedDays")) || {};
 
-    if (normalize1 === normalize2) {
-      results.push([phase1, phase2]);
+for (let i = 1; i <= 24; i++) {
+  const box = document.createElement("li");
+  box.classList.add("calendar-box");
+  const isOpened = openedDays[i];
+  const number = document.createElement("p");
+  number.innerHTML = i;
+  const icon = document.createElement("i");
+  icon.classList.add("fas", isOpened ? "fa-check-circle" : "fa-gift");
+  icon.style.color = isOpened ? "green" : "gold";
+  const description = document.createElement("p");
+  description.innerHTML = isOpened ? gifts[i - 1] : "Open me!";
+  box.appendChild(number);
+  box.appendChild(icon);
+  box.appendChild(description);
+  box.addEventListener("click", () => {
+    if (!isOpened) {
+      openedDays[i] = true;
+      localStorage.setItem("openedDays", JSON.stringify(openedDays));
+      icon.classList.remove("fa-gift");
+      icon.classList.add("fa-check-circle");
+      icon.style.color = "green";
+      description.innerHTML = gifts[i - 1];
+      alert(`Day ${i} gift: ${gifts[i - 1]}`);
+    } else {
+      alert(`Day ${i} gift is already opened: ${gifts[i - 1]}`);
     }
-  }
-  return results;
+  });
+  calendarContainer.appendChild(box);
 }
-
-console.log(findAnagrams(anagrams));

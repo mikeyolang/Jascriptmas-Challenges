@@ -1,61 +1,86 @@
-const calendarContainer = document.getElementById("calendar");
+import { films } from "/data.js";
 
-// Sample gifts for each day
-const gifts = [
-  "Chocolate Bar 🎁",
-  "Holiday Mug ☕",
-  "Warm Socks 🧦",
-  "Candy Cane 🍭",
-  "Christmas Card 📜",
-  "Snow Globe ❄️",
-  "Ornament 🎄",
-  "Gift Card 💳",
-  "Hot Cocoa 🍫",
-  "Scarf 🧣",
-  "Mitten 🧤",
-  "Mini Wreath 🌿",
-  "Christmas Candle 🕯️",
-  "Holiday Cookie 🍪",
-  "Toy Train 🚂",
-  "Santa Hat 🎅",
-  "Reindeer Plush 🦌",
-  "Stocking 🎀",
-  "Holiday Book 📚",
-  "Festive Pen ✍️",
-  "Pine Scent Spray 🌲",
-  "Photo Frame 🖼️",
-  "Holiday Lights 💡",
-  "Star Decor ⭐",
-];
+// Game State
+let availableFilms = [...films];
+let currentFilm = null;
+let remainingGuesses = 3;
 
-const openedDays = JSON.parse(localStorage.getItem("openedDays")) || {};
+// Useful elements
+const guessInput = document.getElementById("guess-input");
+const messageContainer =
+  document.getElementsByClassName("message-container")[0];
+const emojiCluesContainer = document.getElementsByClassName(
+  "emoji-clues-container"
+)[0];
+const submitButton = document.getElementById("submit-button");
 
-for (let i = 1; i <= 24; i++) {
-  const box = document.createElement("li");
-  box.classList.add("calendar-box");
-  const isOpened = openedDays[i];
-  const number = document.createElement("p");
-  number.innerHTML = i;
-  const icon = document.createElement("i");
-  icon.classList.add("fas", isOpened ? "fa-check-circle" : "fa-gift");
-  icon.style.color = isOpened ? "green" : "gold";
-  const description = document.createElement("p");
-  description.innerHTML = isOpened ? gifts[i - 1] : "Open me!";
-  box.appendChild(number);
-  box.appendChild(icon);
-  box.appendChild(description);
-  box.addEventListener("click", () => {
-    if (!isOpened) {
-      openedDays[i] = true;
-      localStorage.setItem("openedDays", JSON.stringify(openedDays));
-      icon.classList.remove("fa-gift");
-      icon.classList.add("fa-check-circle");
-      icon.style.color = "green";
-      description.innerHTML = gifts[i - 1];
-      alert(`Day ${i} gift: ${gifts[i - 1]}`);
-    } else {
-      alert(`Day ${i} gift is already opened: ${gifts[i - 1]}`);
-    }
-  });
-  calendarContainer.appendChild(box);
+// Helper: Pick a random film
+function pickRandomFilm() {
+  if (availableFilms.length === 0) {
+    showMessage("That's all folks!");
+    disableGame();
+    return;
+  }
+  const randomIndex = Math.floor(Math.random() * availableFilms.length);
+  currentFilm = availableFilms.splice(randomIndex, 1)[0];
+  displayClues(currentFilm.emoji);
 }
+
+// Display emoji clues
+function displayClues(emoji) {
+  emojiCluesContainer.innerHTML = emoji.join(" ");
+}
+
+// Show messages to the player
+function showMessage(message) {
+  messageContainer.textContent = message;
+}
+
+// Disable form during pauses or when the game ends
+function disableGame(disabled = true) {
+  guessInput.disabled = disabled;
+  submitButton.disabled = disabled;
+}
+
+// Reset guesses and pick the next film
+function resetGame() {
+  remainingGuesses = 3;
+  pickRandomFilm();
+  disableGame(false);
+}
+
+// Check similarity between two strings
+function isSimilar(answer, correctAnswer) {
+  const normalize = (str) => str.toLowerCase().trim();
+  return normalize(answer) === normalize(correctAnswer);
+}
+
+// Handle the player's guess
+function handleGuess() {
+  const playerGuess = guessInput.value;
+  guessInput.value = ""; // Clear input
+  if (!playerGuess.trim()) return;
+
+  if (isSimilar(playerGuess, currentFilm.name)) {
+    showMessage("Correct!");
+    disableGame();
+    setTimeout(resetGame, 3000);
+  } else {
+    remainingGuesses--;
+    if (remainingGuesses > 0) {
+      showMessage(
+        `Incorrect! You have ${remainingGuesses} more guesses remaining.`
+      );
+    } else {
+      showMessage(`The film was "${currentFilm.name}"!`);
+      disableGame();
+      setTimeout(resetGame, 3000);
+    }
+  }
+}
+
+// Event Listener
+submitButton.addEventListener("click", handleGuess);
+
+// Initialize the Game
+pickRandomFilm();
